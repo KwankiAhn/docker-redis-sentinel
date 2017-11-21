@@ -12,9 +12,11 @@ if [ "$ROLE" = "SLAVE" ]; then
 		exit 0
 	fi
 	echo " >>> Run as slave"
+	sed -i "s/@MASTER_HOST@/$MASTER_HOST/g" /redis/sentinel.conf
+	sed -i "s/@MASTER_PORT@/$MASTER_PORT/g" /redis/sentinel.conf
 	redis-sentinel /redis/sentinel.conf
-	redis-cli -p 26379 sentinel remove mymaster
-	redis-cli -p 26379 sentinel monitor mymaster "$MASTER_HOST" "$MASTER_PORT" 2 
+#	redis-cli -p 26379 sentinel remove mymaster
+#	redis-cli -p 26379 sentinel monitor mymaster "$MASTER_HOST" "$MASTER_PORT" 2
 	echo " >>> Finished"
 elif [ "$ROLE" = "MASTER" ]; then 
 	echo " >>> Run as master"
