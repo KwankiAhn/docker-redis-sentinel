@@ -20,8 +20,12 @@ if [ "$ROLE" = "SLAVE" ]; then
 	echo " >>> Finished"
 elif [ "$ROLE" = "MASTER" ]; then 
 	echo " >>> Run as master"
+	sed -i "s/@MASTER_HOST@/127.0.0.1/g" /redis/sentinel.conf
+        sed -i "s/@MASTER_PORT@/6379/g" /redis/sentinel.conf
 	redis-sentinel /redis/sentinel.conf
 	echo " >>> Finished"
 else
-	echo " >>> Invalid Role, exit..."
+	echo " >>> Run as UNKNOWN Role, this is not supposed to triggered as 1st invoking redis"
+	redis-sentinel /redis/sentinel.conf
+        echo " >>> Finished"
 fi
